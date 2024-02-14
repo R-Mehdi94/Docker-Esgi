@@ -1,0 +1,10 @@
+# Définir cette configuration Compose afin de lancer l'application
+# Grilli en production.
+version: '3.8'
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: thomas
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: 

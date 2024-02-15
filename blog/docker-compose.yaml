@@ -13,13 +13,15 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
-    blog:
-      build: .
-      environment:
-        DATABASE_URL: postgres://thomas:admin@db:5432/blog
-        ROCKET_ADDRESS: 0.0.0.0
-      ports:
-        - "8000:8000"
+  blog:
+    build: .
+    environment:
+      DATABASE_URL: postgres://thomas:admin@db:5432/blog
+      ROCKET_ADDRESS: 0.0.0.0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
 
 volumes:
   db_data:

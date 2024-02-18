@@ -1,9 +1,9 @@
-# Créer un Dockerfile pour cette application en mode production
 FROM debian as latest
 
-#(nightly normalement mais marche pas )
+# Installation rust nightly
 RUN apt-get update && apt-get install -y curl build-essential libpq-dev 
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 WORKDIR /blog
 COPY . .
@@ -14,7 +14,11 @@ RUN cargo install diesel_cli --no-default-features --features postgres
 EXPOSE 8000
 
 
-# Build the Rust app (pas sur)
+# Build l'app rust
 RUN cargo build
-# Set the command to run the Rust app (pas sur)
+
+# migration de la bd
+CMD diesel migration run
+
+# Set the command to run the Rust app
 CMD cargo run

@@ -1,9 +1,15 @@
-# Créer un Dockerfile pour cette application en mode production
-FROM node:20-alpine
+FROM node:lts
 
-COPY . /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /app
+
+COPY package.json ./
+COPY package-lock.json ./
 RUN npm install 
-RUN npm run build 
-RUN npx prisma generate
-CMD ["node","dist/main.js"]
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "start"]

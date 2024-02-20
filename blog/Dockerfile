@@ -17,8 +17,5 @@ EXPOSE 8000
 # Build l'app rust
 RUN cargo build
 
-# migration de la bd
-CMD diesel migration run
-
-# Set the command to run the Rust app
-CMD cargo run
+# migration de la bd et lancement de l'app
+CMD diesel migration run && cargo run

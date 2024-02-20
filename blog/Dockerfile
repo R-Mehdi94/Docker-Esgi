@@ -1,3 +1,4 @@
+# Créer un Dockerfile pour cette application en mode production
 FROM debian as latest
 
 # Installation rust nightly
@@ -17,8 +18,5 @@ EXPOSE 8000
 # Build l'app rust
 RUN cargo build
 
-# migration de la bd
-CMD diesel migration run
-
-# Set the command to run the Rust app
-CMD cargo run
+# migration de la bd et  lancement de lab
+CMD diesel migration run && cargo run

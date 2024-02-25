@@ -9,9 +9,9 @@ services:
       - website:/var/www/html
 
   nginx:
-    image: nginx:latest
+    image: nginx:latest  
     ports:
-      - "8080:80"
+      - ${NGINX_PORT}
     volumes:
       - .docker/nginx/grilli.com.conf:/etc/nginx/conf.d/default.conf
       - website:/var/www/html

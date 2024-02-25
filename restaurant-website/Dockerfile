@@ -5,6 +5,8 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html
 
+ENV APP_ENV=prod
+
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt-get update && apt-get install -y \
@@ -12,9 +14,7 @@ RUN apt-get update && apt-get install -y \
         libzip-dev \
         zip \
         git \
-    && docker-php-ext-install intl zip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-install intl zip 
 
 RUN curl -sS https://getcomposer.org/installer | php -- \
      --install-dir=/usr/bin --filename=composer
@@ -22,8 +22,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 RUN wget https://get.symfony.com/cli/installer -O - | bash
 
 RUN composer install --no-dev --optimize-autoloader
-
-RUN composer require symfony/runtime
 
 RUN php bin/console asset-map:compile
 

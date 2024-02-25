@@ -4,11 +4,12 @@ services:
     build:
       context: ./server
     ports:
-      - "3000:3000"
+      - "5000:${API_BASE_URL}"
   client:
     build:
       context: ./client
     ports:
-      - "5000:5173"
+      - "3000:3000"
+    
     depends_on: 
       - server

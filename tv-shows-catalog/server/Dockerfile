@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -8,8 +8,8 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
 
+RUN npm run build 
+RUN npx prisma generate
 EXPOSE 3000
-
-CMD ["npm", "start"]
+CMD ["node","dist/main.js"]

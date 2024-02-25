@@ -5,23 +5,31 @@ version: '3'
 services:
   db:
     image: postgres:16-alpine
+
     environment:
-      POSTGRES_USER: thomas
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: blog
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
 
   blog:
     build: .
     environment:
-      DATABASE_URL: postgres://thomas:admin@db:5432/blog
-      ROCKET_ADDRESS: 0.0.0.0
+      DATABASE_URL: ${DATABASE_URL}
+      ROCKET_ADDRESS: ${ROCKET_ADDRESS}
     ports:
-      - "8000:8000"
+      - ${PORTS_BLOG}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
-volumes:
+
+volumes:  
   postgres_data:
     driver: local

@@ -1,2 +1,27 @@
 # Définir cette configuration Compose afin de lancer l'application
 # The Computer Club's Blog en production.
+version: '3'
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: thomas
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: blog
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  blog:
+    build: .
+    environment:
+      DATABASE_URL: postgres://thomas:admin@db:5432/blog
+      ROCKET_ADDRESS: 0.0.0.0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+    driver: local

@@ -1,21 +1,13 @@
-FROM debian as latest
+FROM rustlang/rust:nightly-slim
 
-# Installation rust nightly
-RUN apt-get update && apt-get install -y curl build-essential libpq-dev 
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
-ENV PATH="/root/.cargo/bin:${PATH}"
+RUN apt-get update && apt-get install -y build-essential libpq-dev 
 
 WORKDIR /blog
 COPY . .
-
 
 RUN cargo install diesel_cli --no-default-features --features postgres
 
 EXPOSE 8000
 
-
-# Build l'app rust
-RUN cargo build
-
-# migration de la bd et lancement de l'app
 CMD diesel migration run && cargo run
+
